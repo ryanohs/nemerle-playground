@@ -1,0 +1,53 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+
+namespace ClassLibrary1
+{
+    [TestFixture]
+    public class Tests
+    {     
+        [Test]
+        public fibo_test() : void
+        {
+            foreach(i in fibonacci().Take(10))
+            {
+                Console.WriteLine(i);
+            }
+        }
+        
+        public fibonacci() : IEnumerable[int]
+        {
+            yield 1;
+            yield 2;
+            mutable n = 1, m = 2;
+            while(true) {
+                def next = n + m;
+                yield next;
+                n = m;
+                m = next;
+            }
+        }
+
+        [Test]
+        public can_quicksort() : void
+        {
+            Console.WriteLine(String.Join(" ", quicksort([])));
+            Console.WriteLine(String.Join(" ", quicksort([2])));
+            Console.WriteLine(String.Join(" ", quicksort([4,2,8,3,1,7])));
+        }
+
+        public quicksort[T](arr : list[T]) : list[T] where T : IComparable
+        {
+            match(arr) {
+                | [] => []
+                | x::xs => quicksort($[y|y in xs, (y.CompareTo(x) < 0)]) + [x] + quicksort($[y|y in xs, (y.CompareTo(x) > 0)])
+            }
+        }
+    }
+}
