@@ -1,10 +1,12 @@
 ﻿using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
+using Nemerle.Xml;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using NUnit.Framework;
 
 namespace ClassLibrary1
@@ -20,7 +22,7 @@ namespace ClassLibrary1
                 Console.WriteLine(i);
             }
         }
-        
+
         public fibonacci() : IEnumerable[int]
         {
             yield 1;
@@ -48,6 +50,27 @@ namespace ClassLibrary1
                 | [] => []
                 | x::xs => quicksort($[y|y in xs, (y.CompareTo(x) < 0)]) + [x] + quicksort($[y|y in xs, (y.CompareTo(x) > 0)])
             }
+        }
+
+        [Test]
+        public render_html() : void
+        {
+            def title = "Programming language authors";
+            def authors = ["Anders Hejlsberg", "Simon Peyton-Jones"];
+
+            def html = xml <#
+<html>
+    <head>
+        <title>$title</title>
+    </head>
+    <body>
+        <ul $when(authors.Any())>
+            <li $foreach(author in authors)>$author</li>
+        </ul>
+    </body>
+</html>
+#>;
+            Console.WriteLine(html.ToString());
         }
     }
 }
